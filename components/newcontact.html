@@ -1,0 +1,67 @@
+
+<div class="conteiner" style="text-align:center">
+
+<div class="header" style="text-align:center">
+	<h1>New contact</h1>
+</div>
+
+<div class="row" >
+
+<div class="col-md-4" style="padding-top:5x;">
+	<img id="avatarimg" style="width:120px">
+</div>
+<div class="col-md-4">
+	<form id="addcontact-form" class="form-horizontal" enctype="multipart/form-data">
+		<div id="error" class="col-md-12" style="color:red;text-align:center; padding:5px; height:60px"></div>
+		<div class="form-group">
+				<input  id="name"  type="text" class="form-control" name="name" placeholder="Contact name" required>
+			
+		</div>
+		<div class="form-group">
+				<input  id="email"  type="email" class="form-control" name="email" placeholder="E-Mail Address" required >		   
+			
+		</div>
+		<div class="form-group">
+				<input  id="password"  type="password" class="form-control" name="password" placeholder="Password" >		   
+			
+		</div>
+		<div class="form-group">
+				<input  id="password_confirmation"  type="password" class="form-control" name="password_confirmation" placeholder="Confirm password" required >		   
+		
+		</div>	
+		<div class="form-group">
+				<select id="agency" class="form-control">
+					<option value="">Agency</option>	
+				</select>
+		
+		</div>
+		<div class="form-group">
+				<select id="professions" class="form-control" multiple>
+					<option value="">Professions</option>	
+				</select>
+			
+		</div>
+		<div class="form-group">
+				<input  id="phone"  type="text" class="form-control" name="phone" placeholder="Phone" >		   
+			
+		</div>
+		<div class="form-group">
+				<input  id="avatar"  type="file" accept="image/*" class="form-control" name="avatar" placeholder="Avatar" >		   
+			
+		</div>
+		<div class="form-group">
+				<button id="addcontactbtn" type="submit" class="btn btn-primary">
+					Add
+				</button>
+			
+		</div>
+		
+</form>
+</div>
+<div class="col-md-4">
+</div>
+</div>
+
+</div>
+
+
