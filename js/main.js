@@ -18,9 +18,9 @@ var app = {
 	admin : appadmin,
 	user_id : appuser_id,
 	div : document.getElementById('main'),
-	url : "http://192.168.33.10/resrapp/",
-	server : 'http://192.168.33.10/restapp/public/api/',
-	serverimg : 'http://192.168.33.10/restapp/public/',
+	url : "http://192.168.33.10/Front-App/",
+	server : 'http://192.168.33.10/Rest-app/public/api/',
+	serverimg : 'http://192.168.33.10/Rest-app/public/',
 	xhr : new XMLHttpRequest(),
 	route : new Map(),
 	GET : new Map(),
@@ -153,7 +153,6 @@ function logout(){
   var formData = new FormData();
   
   formData.append('api_token', app.api_token);
-  formData.append('api_key', app.api_key)
 	console.log("api_key "+app.api_key);
 	console.log("api_token "+app.api_token);
 	
@@ -161,6 +160,7 @@ function logout(){
 	
   var xhr = new XMLHttpRequest();
   xhr.open('POST', app.server+"logout", true);
+  xhr.setRequestHeader("apikey", app.api_key);
   xhr.send(formData);
 	xhr.onload = function () {
 	  if (this.readyState == 4 && this.status == 200) {

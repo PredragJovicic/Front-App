@@ -30,10 +30,10 @@ addcontact.form.onsubmit = function(event) {
   formData.append('avatar', document.getElementById('avatar').files[0]);
   
   formData.append('api_token', app.api_token);
-  formData.append('api_key', app.api_key);
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', addcontact.route, true);
+  xhr.setRequestHeader("apikey", app.api_key);
   xhr.send(formData);
 	xhr.onload = function () {
 	  if (this.readyState == 4 && this.status == 201) {

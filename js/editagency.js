@@ -54,7 +54,6 @@ update.form.onsubmit = function(event) {
   
   formData.append('api_token', app.api_token)
 
-
   var xhr = new XMLHttpRequest();
   xhr.open('POST', update.route, true);
   xhr.send(formData);

@@ -222,15 +222,20 @@ function deleteAgency(id){
 if( confirm("Delete agency?")){	
 $('#loadingajax').show();
 
-$.get( app.server+'deleteagency/'+id+'?api_token='+app.api_token , {
+$.ajax({
+    url: app.server+'deleteagency/'+id,
+    type: 'DELETE',
+	data:{api_token : app.api_token},
+    success: function(result) {
+        
+		$('#loadingajax').hide();
+		$('#tdagency_'+id).hide();		
+	
+    }
+});
 
-	}, function(data) {
-	
-	$('#loadingajax').hide();
-	$('#tdagency_'+id).hide();		
-	
-	});
 }
+
 }
 
 function deleteContact(id){
@@ -238,13 +243,17 @@ function deleteContact(id){
 if( confirm("Delete contact?")){	
 $('#loadingajax').show();
 
-$.get( app.server+'deleteuser/'+id+'?api_token='+app.api_token , {
+$.ajax({
+    url: app.server+'deleteuser/'+id,
+    type: 'DELETE',
+	data:{api_token : app.api_token},
+    success: function(result) {
+			
+		$('#loadingajax').hide();
+		$('#tdcontact_'+id).hide();		
 
-	}, function(data) {
-	
-	$('#loadingajax').hide();
-	$('#tdcontact_'+id).hide();		
-	
-	});
+    }
+});
+
 }
 }

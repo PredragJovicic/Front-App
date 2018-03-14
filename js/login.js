@@ -18,11 +18,11 @@ login.form.onsubmit = function(event) {
   
   formData.append('email', document.getElementById('email').value); 
   formData.append('password', document.getElementById('password').value); 
-  formData.append('api_key', app.api_key)
 
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', login.route, true);
+  xhr.setRequestHeader("apikey", app.api_key);
   xhr.send(formData);
 	xhr.onload = function () {
 	  if (this.readyState == 4 && this.status == 200) {
