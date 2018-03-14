@@ -34,16 +34,16 @@ var app = {
 index.html
 
 <head>
-	<link rel="stylesheet" href="http://{ url rest aplikacije }/dist/css/style.css" />
+	<link rel="stylesheet" href="http://{ url ove aplikacije }/dist/css/style.css" />
 </head>
 <body>
 <nav>
-	<a class="navbar-brand" href="http://{ url rest aplikacije }/">Home</a>
-	<li ><a class="nav-link navadmin" href="http://{ url rest aplikacije }/addAgency">Add Agency</a></li>	
-	<li><a class="nav-link navadmin" href="http://{ url rest aplikacije }/addContact">Add Contact</a></li>		
-	<li><a class="nav-link navuser" href="http://{ url rest aplikacije }/editContact">Edit Contact</a></li>	
+	<a class="navbar-brand" href="http://{ url ove aplikacije }/">Home</a>
+	<li ><a class="nav-link navadmin" href="http://{ url ove aplikacije }/addAgency">Add Agency</a></li>	
+	<li><a class="nav-link navadmin" href="http://{ url ove aplikacije }/addContact">Add Contact</a></li>		
+	<li><a class="nav-link navuser" href="http://{ url ove aplikacije }/editContact">Edit Contact</a></li>	
 </nav>
-	<img src="http://{ url rest aplikacije }/dist/img/ajax-loader.gif"  id="loadingajax1"  alt="Agency"/>
-	<script src="http://{ url rest aplikacije }/js/main.js"></script>
+	<img src="http://{ url ove aplikacije }/dist/img/ajax-loader.gif"  id="loadingajax1"  alt="Agency"/>
+	<script src="http://{ url ove aplikacije }/js/main.js"></script>
 </body>
 
