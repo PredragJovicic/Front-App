@@ -8,8 +8,9 @@ $('#loadingajax').show();
 	
 	form : document.getElementById('addcontact-form'),
 	uploadButton : document.getElementById('addcontactbtn'),
-	route : app.server+'adduser',
+	route : app.server+'users',
 	massages : document.getElementById('error'),
+	file : null
 	
 }
 
@@ -19,47 +20,48 @@ addcontact.form.onsubmit = function(event) {
   addcontact.massages.innerHTML ="";
   addcontact.uploadButton.innerHTML = 'Adding...';
 
-  var formData = new FormData();
-  formData.append('name', document.getElementById('name').value);
-  formData.append('email', document.getElementById('email').value); 
-  formData.append('password', document.getElementById('password').value);
-  formData.append('password_confirmation', document.getElementById('password_confirmation').value);
-  formData.append('agency', document.getElementById('agency').value);
-  formData.append('professions', getSelectValues(document.getElementById('professions')));
-  formData.append('phone', document.getElementById('phone').value);
-  formData.append('avatar', document.getElementById('avatar').files[0]);
-  
-  formData.append('api_token', app.api_token);
+  var obj = {	name: document.getElementById('name').value,
+				email: document.getElementById('email').value,
+				password: document.getElementById('password').value,
+				password_confirmation: document.getElementById('password_confirmation').value,
+				agency: document.getElementById('agency').value,
+				professions: getSelectValues(document.getElementById('professions')),
+				phone: document.getElementById('phone').value,
+				avatar: addcontact.file,
+				api_token: app.api_token
+			};
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', addcontact.route, true);
-  xhr.setRequestHeader("apikey", app.api_key);
-  xhr.send(formData);
-	xhr.onload = function () {
-	  if (this.readyState == 4 && this.status == 201) {
-		  
-		addcontact.uploadButton.innerHTML = 'Add';
-		var dataall = JSON.parse(this.responseText);
-		console.log(this.responseText);
-		if(dataall.data.name == document.getElementById('name').value){
-			addcontact.massages.innerHTML = dataall.data.name +" Added succefuly";
-			addcontact.form.reset();
-		}else{
-			addcontact.massages.innerHTML = "Uppsss! monething went wrong";
-		}
+  	$.ajax({
+		url: addcontact.route,
+		type: 'POST',
+		data: JSON.stringify(obj), 
+		contentType: 'application/json; charset=utf-8',
+		headers: {"Accept": "application/json","apikey": app.api_key},
+
+		success: function(result, status) {
+				
+		if(status = "success"){
+			addcontact.uploadButton.innerHTML = 'Add';
+			var dataall = JSON.parse(JSON.stringify(result));
 	
-	  } else {
-		  
-	    addcontact.uploadButton.innerHTML = 'Add';
-		addcontact.massages.innerHTML = 'An error occurred!';
-		
-	  }
-	};
+			if(dataall.data.name == document.getElementById('name').value){
+				addcontact.massages.innerHTML = dataall.data.name +" Added succefuly";
+				addcontact.form.reset();
+			}else{
+				addcontact.massages.innerHTML = "Uppsss! monething went wrong";
+			}
+		}else{
+			addcontact.uploadButton.innerHTML = 'Add';
+			addcontact.massages.innerHTML = 'An error occurred!';	
+		}
+			
+		}
+	});	 
 
 }	
 	
 function setAgencies(){
-$.get( app.server+'getagencies?api_token='+app.api_token , {}, function(data) {
+$.get( app.server+'agencies?api_token='+app.api_token , {}, function(data) {
 	
 		var jsonData = JSON.parse(JSON.stringify(data));
 
@@ -76,11 +78,9 @@ $.get( app.server+'getagencies?api_token='+app.api_token , {}, function(data) {
  setAgencies();
  
  function setProfessions(){
-$.get( app.server+'getprofessions?api_token='+app.api_token , {}, function(data) {
+$.get( app.server+'professions?api_token='+app.api_token , {}, function(data) {
 	
 		var jsonData = JSON.parse(JSON.stringify(data));
-		console.log(jsonData);
-
 		var professiondisplay;
 		for(var i=0;i<jsonData.length;i++){
 			
@@ -98,22 +98,26 @@ function readURLv(input) {
 
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
-
+		//reader.readAsDataURL(input.files[0]);
 		reader.onload = function (e) {
 		
-			$('#avatarimg').attr('src',e.target.result)
+			$('#avatarimg').attr('src',e.target.result);
+			addcontact.file = e.target.result;
 		
 		}
 
 		reader.readAsDataURL(input.files[0]);
+		
+		
 	}
 			
 }
+
 $('#avatar').change(function(){
 	readURLv(this);
 });
 function getSelectValues(select) {
-  var result = [];
+  var result = '';
   var options = select && select.options;
   var opt;
 
@@ -121,8 +125,9 @@ function getSelectValues(select) {
     opt = options[i];
 
     if (opt.selected) {
-      result.push(opt.value || opt.text);
+	  result += opt.value+",";
     }
   }
+  result = result.slice(0, -1);
   return result;
 }

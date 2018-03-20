@@ -4,7 +4,7 @@ if(app.admin != 1){
 }
 
 $('#loadingajax').show();
-$.get( app.server+'getagency/'+app.GET.get('id')+'?api_token='+app.api_token , {
+$.get( app.server+'agencies/'+app.GET.get('id')+'?api_token='+app.api_token , {
 
 	}, function(data) {
 		

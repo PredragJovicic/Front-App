@@ -1,8 +1,8 @@
 var routegu = '';
 if(app.admin == 1){
-	routegu = 'getuserAdminstrator/'+app.GET.get('id');
+	routegu = 'users/'+app.GET.get('id');
 }else if(app.admin == 0){
-	routegu = 'getuser/'+app.user_id;
+	routegu = 'users/'+app.user_id;
 }else{
 	window.location.href = "error";
 }

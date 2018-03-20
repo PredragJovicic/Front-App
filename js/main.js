@@ -148,33 +148,35 @@ function Route(val,dest){
 }
 
 
+//document.cookie = "appuser=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 function logout(){
-	
-  var formData = new FormData();
-  
-  formData.append('api_token', app.api_token);
-	console.log("api_key "+app.api_key);
-	console.log("api_token "+app.api_token);
 	
 	document.getElementById('logoutbtn').innerHTML = 'Logging out...'
 	
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', app.server+"logout", true);
-  xhr.setRequestHeader("apikey", app.api_key);
-  xhr.send(formData);
-	xhr.onload = function () {
-	  if (this.readyState == 4 && this.status == 200) {
-		   
-		var dataall = JSON.parse(this.responseText);
-		var data = dataall.data;		   
-		document.cookie = "appuser=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-		window.location.href = "./";
+$.ajax({
+    url: app.server+"logout",
+    type: 'POST',
+	data: JSON.stringify({'api_token': app.api_token}),
+	contentType: 'application/json',
+	headers: {"apikey": app.api_key},
+	
+    success: function(result,status) {
+			
+		if(status == "success"){	
 		
-	  } else {
-		  
-	    alert('Server error');
-	  }
-	};
+			var dataall = JSON.parse(JSON.stringify(result));
+			var data = dataall.data;		   
+			document.cookie = "appuser=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			window.location.href = "./";
+			
+		}else{
+			
+			alert('Server error');
+		}
+		
+    }
+});	
+
 }
 
 function start(){

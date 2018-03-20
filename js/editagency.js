@@ -8,7 +8,7 @@ var city = "";
 
 
 $('#loadingajax').show();
-$.get( app.server+'getagency/'+app.GET.get('id')+'?api_token='+app.api_token , {
+$.get( app.server+'agencies/'+app.GET.get('id')+'?api_token='+app.api_token , {
 
 	}, function(data) {
 		
@@ -31,7 +31,7 @@ $.get( app.server+'getagency/'+app.GET.get('id')+'?api_token='+app.api_token , {
 	
 	form : document.getElementById('update-form'),
 	uploadButton : document.getElementById('updatebtn'),
-	route : app.server+'updateagency/'+app.GET.get('id'),
+	route : app.server+'agencies/'+app.GET.get('id'),
 	massages : document.getElementById('error'),
 	
 }
@@ -42,26 +42,27 @@ update.form.onsubmit = function(event) {
   update.massages.innerHTML ="";
   update.uploadButton.innerHTML = 'Updating...';
 
-  var formData = new FormData();
-  
-  formData.append('name', document.getElementById('name').value);
-  formData.append('address', document.getElementById('address').value);
-  formData.append('countri', document.getElementById('countri').value);
-  formData.append('city', document.getElementById('city').value);
-  formData.append('phone', document.getElementById('phone').value);
-  formData.append('email', document.getElementById('email').value);
-  formData.append('web', document.getElementById('web').value);
-  
-  formData.append('api_token', app.api_token)
+  	var obj = {'name': document.getElementById('name').value,
+			'address': document.getElementById('address').value,		
+			'countri': document.getElementById('countri').value,
+			'city': document.getElementById('city').value,
+			'phone': document.getElementById('phone').value,
+			'email': document.getElementById('email').value,
+			'web': document.getElementById('web').value,
+			'api_token': app.api_token
+			}
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', update.route, true);
-  xhr.send(formData);
-	xhr.onload = function () {
-	  if (this.readyState == 4 && this.status == 200) {
-		  
+$.ajax({
+    url: update.route,
+    type: 'PUT',
+	data: JSON.stringify(obj),
+	contentType: 'application/json',
+	headers: {"apikey": app.api_key},
+	
+    success: function(result,status) {
+			
 		update.uploadButton.innerHTML = 'Update';
-		var dataall = JSON.parse(this.responseText);
+		var dataall = JSON.parse( JSON.stringify(result));
 		console.log(dataall.name);
 		if(dataall.name == document.getElementById('name').value){
 			update.massages.innerHTML = dataall.name +" Upadated succefuly";
@@ -69,19 +70,14 @@ update.form.onsubmit = function(event) {
 			update.massages.innerHTML = "Uppsss! monething went wrong";
 		}
 	
-	  } else {
-		  
-	    update.uploadButton.innerHTML = 'Update';
-		update.massages.innerHTML = 'An error occurred!';
-		
-	  }
-	};
+    }
+});
 
 }	
 	
 var jsonData;
 function setContries(){
-$.get( app.server+'getcountriescities?api_token='+app.api_token , {}, function(data) {
+$.get( app.server+'countriescities?api_token='+app.api_token , {}, function(data) {
 	
 		jsonData = JSON.parse(JSON.stringify(data));
 		

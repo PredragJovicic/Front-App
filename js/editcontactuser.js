@@ -2,17 +2,12 @@ if(app.admin != 0){
 	window.location.href = "error";
 
 }
-/*
-document.getElementById('updatecontact-form').onsubmit = function(event) {
-  event.preventDefault();
-console.log("Default : "+document.getElementById('password').defaultValue+" Current : "+document.getElementById('password').value);
-}
-*/
+
 var myprofessions = "";
 
 $('#loadingajax').show();
 
-$.get( app.server+'getuser/'+app.user_id+'?api_token='+app.api_token , {
+$.get( app.server+'users/'+app.user_id+'?api_token='+app.api_token , {
 
 	}, function(data) {
 		
@@ -36,8 +31,9 @@ $.get( app.server+'getuser/'+app.user_id+'?api_token='+app.api_token , {
 	
 	form : document.getElementById('updatecontact-form'),
 	uploadButton : document.getElementById('editcontactbtn'),
-	route : app.server+'updateuser/'+app.user_id,
+	route : app.server+'users/'+app.user_id,
 	massages : document.getElementById('error'),
+	file : null
 	
 }
 
@@ -47,49 +43,54 @@ update.form.onsubmit = function(event) {
   update.massages.innerHTML ="";
   update.uploadButton.innerHTML = 'Updating...';
 
-  var formData = new FormData();
-  formData.append('name', document.getElementById('name').value);
-  formData.append('email', document.getElementById('email').value); 
   
-  if(document.getElementById('password').value != ""){
-	formData.append('password', document.getElementById('password').value);
-  }
-  formData.append('professions', getSelectValues(document.getElementById('professions')));
-  formData.append('phone', document.getElementById('phone').value);
-  
-  if(document.getElementById('avatar').files[0] != null){
-	formData.append('avatar', document.getElementById('avatar').files[0]);
-  }
-  
-  formData.append('api_token', app.api_token)
+  var obj = {	
+			name: document.getElementById('name').value,
+			email: document.getElementById('email').value,
+			professions: getSelectValues(document.getElementById('professions')),
+			phone: document.getElementById('phone').value,
+			api_token: app.api_token
+			};
+	
+	if(document.getElementById('password').value != ""){
+		obj.password = document.getElementById('password').value;
+	}		
+	if(document.getElementById('avatar').files[0] != null){
+		obj.avatar = update.file;
+	}		
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', update.route, true);
-  xhr.send(formData);
-	xhr.onload = function () {
-	  if (this.readyState == 4 && this.status == 200) {
-		  
-		update.uploadButton.innerHTML = 'Update';
-		var dataall = JSON.parse(this.responseText);
-		console.log(dataall.name);
+  	$.ajax({
+		url: update.route,
+		type: "PUT",
+		data: JSON.stringify(obj),
+		contentType: 'application/json',
+		headers: {"apikey": app.api_key},
+
+		success: function(result, status) {
+				
+		if(status = "success"){
+			update.uploadButton.innerHTML = 'Update';
+			var dataall = JSON.parse(JSON.stringify(result));
+	
 			if(dataall.name == document.getElementById('name').value){
 				update.massages.innerHTML = dataall.name +" Updated succefuly";
+			
 			}else{
 				update.massages.innerHTML = "Uppsss! monething went wrong";
 			}
-	
-	  } else {
-		  
-	    update.uploadButton.innerHTML = 'Update';
-		update.massages.innerHTML = 'An error occurred!';
-		
-	  }
-	};
+		}else{
+			update.uploadButton.innerHTML = 'Update';
+			update.massages.innerHTML = 'An error occurred!';	
+		}
+			
+		}
+	});	 
+
 
 }	
 	
  function setProfessions(){
-$.get( app.server+'getprofessions?api_token='+app.api_token , {}, function(data) {
+$.get( app.server+'professions?api_token='+app.api_token , {}, function(data) {
 	
 	var jsonData = JSON.parse(JSON.stringify(data));
 	console.log(myprofessions);
@@ -118,7 +119,7 @@ function readURLv(input) {
 		reader.onload = function (e) {
 		
 			$('#avatarimg').attr('src',e.target.result)
-		
+			update.file = e.target.result;
 			}
 
 		reader.readAsDataURL(input.files[0]);
@@ -129,7 +130,7 @@ $('#avatar').change(function(){
 	readURLv(this);
 });
 function getSelectValues(select) {
-  var result = [];
+  var result = '';
   var options = select && select.options;
   var opt;
 
@@ -137,9 +138,10 @@ function getSelectValues(select) {
     opt = options[i];
 
     if (opt.selected) {
-      result.push(opt.value || opt.text);
+	  result += opt.value+",";
     }
   }
+  result = result.slice(0, -1);
   return result;
 }
 

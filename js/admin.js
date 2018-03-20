@@ -1,4 +1,3 @@
-
 (function () {
 	
 if(app.admin != 1){
@@ -27,15 +26,21 @@ $('#loadingajax').show();
 			localStorage.removeItem('scrollPositionagency');
 		}
 	
-	$.post( app.server+"searchagencies" , {
-
-		search   : search,
+		var obj = {	search   : search,
 		offset    : start,
 		limit : per_page,
-		api_token : app.api_token
-
-	}, function(data) {
-
+		api_token : app.api_token};
+		
+	$.ajax({
+    url: app.server+"searchagencies",
+    type: 'POST',
+	data: JSON.stringify(obj),
+	contentType: 'application/json',
+	headers: {"apikey": app.api_key},
+	
+    success: function(data,status) {
+			
+		
 		$('#loading-agency').hide();
 		$('#loading1-agency').hide();
 		
@@ -52,7 +57,9 @@ $('#loadingajax').show();
 		}
 
 		paginate = false;
-	});
+		
+    }
+});	
 
 	}
 
@@ -132,29 +139,29 @@ if(app.admin != 1){
 			$('#search-contact').val(search);
 			localStorage.removeItem('scrollPositioncontact');
 		}
-	
-	$.post( app.server+"searchcontacts" , {
-
-		search   : search,
+	var obj = {	search   : search,
 		offset    : start,
 		limit : per_page,
-		api_token : app.api_token
-
-	}, function(data) {
-
+		api_token : app.api_token};
+		
+	$.ajax({
+    url: app.server+"searchusers",
+    type: 'POST',
+	data: JSON.stringify(obj),
+	contentType: 'application/json',
+	headers: {"apikey": app.api_key},
+	
+    success: function(data,status) {
+			
+		
 		$('#loading-contact').hide();
 		$('#loading1-contact').hide();
 		if(data){
 
-				var jsonData = JSON.parse(JSON.stringify(data));
+			var jsonData = JSON.parse(JSON.stringify(data));
 			for(var i=0;i<jsonData.length;i++){
-				var counter = jsonData[i];
-				
-				
+				var counter = jsonData[i];	
 				var str='<div class="tdcontact" id="tdcontact_'+counter.id+'"><span class="pagtd">'+counter.name+'</span><span class="pagtd pull-right"><a  onclick="deleteContact('+counter.id+');" ><span  class="glyphicon glyphicon-remove"></span></a></span><span class="pagtd pull-right"><a href="'+app.url+'editContact/'+counter.id+'"><span class="glyphicon glyphicon-edit"></span></a></span><span class="pagtd pull-right"><a href="viewContact/'+counter.id+'"><span class="glyphicon glyphicon-user"></span></a></span></div>';
-				
-				
-				//var str='<tr class="tdcontact" id="tdcontact_'+counter.id+'"><td style="width:70%;">'+counter.name+'</td><td style="width:10%;"><a href="viewContact/'+counter.id+'"><span class="glyphicon glyphicon-user"></span></a></td><td style="width:10%;"><a href="'+app.url+'editContact/'+counter.id+'"><span class="glyphicon glyphicon-edit"></span></a></td><td style="width:10%;"><a  onclick="deleteContact('+counter.id+');" ><span  class="glyphicon glyphicon-remove"></span></a></td></tr>';	
 				$('#paginationcontent-contact').append(str);
 			}
 			start = start + per_page;
@@ -163,8 +170,10 @@ if(app.admin != 1){
 
 		$('#loadingajax').hide();
 		paginate = false;
-	});
-
+		
+    }
+});	
+	
 	}
 
 	$('#paginationcontent-contact').scroll(function(){
@@ -223,7 +232,7 @@ if( confirm("Delete agency?")){
 $('#loadingajax').show();
 
 $.ajax({
-    url: app.server+'deleteagency/'+id,
+    url: app.server+'agencies/'+id,
     type: 'DELETE',
 	data:{api_token : app.api_token},
     success: function(result) {
@@ -244,7 +253,7 @@ if( confirm("Delete contact?")){
 $('#loadingajax').show();
 
 $.ajax({
-    url: app.server+'deleteuser/'+id,
+    url: app.server+'users/'+id,
     type: 'DELETE',
 	data:{api_token : app.api_token},
     success: function(result) {
