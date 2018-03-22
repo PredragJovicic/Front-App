@@ -23,7 +23,7 @@ login.form.onsubmit = function(event) {
 		type: 'POST',
 		data: JSON.stringify(obj),
 		contentType: 'application/json',
-		headers: {"Accept": "application/json","apikey": app.api_key},
+		headers: {"apikey": app.api_key},
 
 		success: function(result, status) {
 				
@@ -49,6 +49,10 @@ login.form.onsubmit = function(event) {
 			login.massages.innerHTML = "Server error!";
 		}
 			
+		},
+		error: function(result, status) {
+			login.uploadButton.innerHTML = 'Login';
+			login.massages.innerHTML = "Server error!";
 		}
 	});
 
