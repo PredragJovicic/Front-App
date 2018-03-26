@@ -63,5 +63,3 @@ User
 username: brown.sven@gmail.com
 password: password
 ```
-## Rest application
-Link [Rest application](https://github.com/PredragJovicic/Rest-app)
